@@ -152,6 +152,23 @@ public class DriverAppIntegrationTest
         verifyComplete(2, 2, 2 * 2, 2);
     }
 
+    @Test
+    public void benchmarkWith2Prewarms()
+    {
+        setBenchmark("benchmark_with_2_prewarms");
+        setQueryRepetitionScope(BenchmarkProperties.QueryRepetitionScope.BENCHMARK);
+        List<String> benchmarks = ImmutableList.of("benchmark_with_2_prewarms_schema=INFORMATION_SCHEMA_query=simple_select", "benchmark_with_2_prewarms_schema=INFORMATION_SCHEMA_query=simple_select_2");
+        verifyBenchmarkStart("benchmark_with_2_prewarms", benchmarks);
+        verifySerialExecution("benchmark_with_2_prewarms_schema=INFORMATION_SCHEMA_query=simple_select", "simple_select", 1);
+        verifySerialExecution("benchmark_with_2_prewarms_schema=INFORMATION_SCHEMA_query=simple_select", "simple_select", 2);
+        verifySerialExecution("benchmark_with_2_prewarms_schema=INFORMATION_SCHEMA_query=simple_select", "simple_select", 3);
+        verifySerialExecution("benchmark_with_2_prewarms_schema=INFORMATION_SCHEMA_query=simple_select_2", "simple_select_2", 1);
+        verifySerialExecution("benchmark_with_2_prewarms_schema=INFORMATION_SCHEMA_query=simple_select_2", "simple_select_2", 2);
+        verifySerialExecution("benchmark_with_2_prewarms_schema=INFORMATION_SCHEMA_query=simple_select_2", "simple_select_2", 3);
+        verifyBenchmarkFinish(benchmarks, ImmutableList.of());
+        verifyComplete(3, 2, 3, 3);
+    }
+
     private void setBenchmark(String s)
     {
         ReflectionTestUtils.setField(benchmarkProperties, "activeBenchmarks", s);

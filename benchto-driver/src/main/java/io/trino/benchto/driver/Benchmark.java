@@ -36,8 +36,8 @@ public class Benchmark
     private String environment;
     private List<Query> queries;
     private int runs;
-    private int prewarmRuns;
-    private int localWarmupRuns;
+    private int suitePrewarmRuns;
+    private int benchmarkPrewarmRuns;
     private int concurrency;
     private List<String> beforeBenchmarkMacros;
     private List<String> afterBenchmarkMacros;
@@ -93,14 +93,14 @@ public class Benchmark
         return runs;
     }
 
-    public int getPrewarmRuns()
+    public int getSuitePrewarmRuns()
     {
-        return prewarmRuns;
+        return suitePrewarmRuns;
     }
 
-    public int getLocalWarmupRuns()
+    public int getBenchmarkPrewarmRuns()
     {
-        return localWarmupRuns;
+        return benchmarkPrewarmRuns;
     }
 
     public int getConcurrency()
@@ -178,8 +178,8 @@ public class Benchmark
                         .map(Query::getName)
                         .collect(Collectors.joining(", ")))
                 .add("runs", runs)
-                .add("prewarmRuns", prewarmRuns)
-                .add("localWarmupRuns", localWarmupRuns)
+                .add("suitePrewarmRuns", suitePrewarmRuns)
+                .add("benchmarkPrewarmRuns", benchmarkPrewarmRuns)
                 .add("concurrency", concurrency)
                 .add("throughputTest", throughputTest)
                 .add("frequency", frequency)
@@ -203,8 +203,8 @@ public class Benchmark
         }
         Benchmark benchmark = (Benchmark) o;
         return Objects.equal(runs, benchmark.runs) &&
-                Objects.equal(prewarmRuns, benchmark.prewarmRuns) &&
-                Objects.equal(localWarmupRuns, benchmark.localWarmupRuns) &&
+                Objects.equal(suitePrewarmRuns, benchmark.suitePrewarmRuns) &&
+                Objects.equal(benchmarkPrewarmRuns, benchmark.benchmarkPrewarmRuns) &&
                 Objects.equal(concurrency, benchmark.concurrency) &&
                 Objects.equal(name, benchmark.name) &&
                 Objects.equal(sequenceId, benchmark.sequenceId) &&
@@ -230,8 +230,8 @@ public class Benchmark
                 environment,
                 queries,
                 runs,
-                prewarmRuns,
-                localWarmupRuns,
+                suitePrewarmRuns,
+                benchmarkPrewarmRuns,
                 concurrency,
                 beforeBenchmarkMacros,
                 afterBenchmarkMacros,
@@ -263,8 +263,8 @@ public class Benchmark
             this.benchmark.dataSource = that.getDataSource();
             this.benchmark.environment = that.getEnvironment();
             this.benchmark.runs = that.getRuns();
-            this.benchmark.prewarmRuns = that.getPrewarmRuns();
-            this.benchmark.localWarmupRuns = that.getLocalWarmupRuns();
+            this.benchmark.suitePrewarmRuns = that.getSuitePrewarmRuns();
+            this.benchmark.benchmarkPrewarmRuns = that.getBenchmarkPrewarmRuns();
             this.benchmark.concurrency = that.getConcurrency();
             this.benchmark.frequency = that.getFrequency();
             this.benchmark.throughputTest = that.isThroughputTest();
@@ -295,15 +295,15 @@ public class Benchmark
             return this;
         }
 
-        public BenchmarkBuilder withPrewarmRuns(int prewarmRuns)
+        public BenchmarkBuilder withSuitePrewarmRuns(int suitePrewarmRuns)
         {
-            this.benchmark.prewarmRuns = prewarmRuns;
+            this.benchmark.suitePrewarmRuns = suitePrewarmRuns;
             return this;
         }
 
-        public BenchmarkBuilder withLocalWarmupRuns(int localWarmupRuns)
+        public BenchmarkBuilder withBenchmarkPrewarmRuns(int benchmarkPrewarmRuns)
         {
-            this.benchmark.localWarmupRuns = localWarmupRuns;
+            this.benchmark.benchmarkPrewarmRuns = benchmarkPrewarmRuns;
             return this;
         }
 

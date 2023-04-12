@@ -103,8 +103,8 @@ public class BenchmarkExecutionDriver
                 "All benchmarks in a group must have the same before and after benchmark macros.");
         checkState(
                 benchmarks.stream().allMatch(benchmark -> benchmark.getRuns() == firstBenchmark.getRuns() &&
-                        benchmark.getPrewarmRuns() == firstBenchmark.getPrewarmRuns()),
-                "All benchmarks in a group must have the same number of runs and prewarm-runs.");
+                        benchmark.getSuitePrewarmRuns() == firstBenchmark.getSuitePrewarmRuns()),
+                "All benchmarks in a group must have the same number of runs and suite-prewarm-runs.");
         checkState(
                 benchmarks.stream().allMatch(benchmark -> benchmark.getConcurrency() == firstBenchmark.getConcurrency() &&
                         benchmark.isThroughputTest() == firstBenchmark.isThroughputTest()),
@@ -145,7 +145,7 @@ public class BenchmarkExecutionDriver
                 benchmark -> new BenchmarkExecutionResultBuilder(benchmark).withExecutions(List.of())));
         List<QueryExecutionResult> executions;
         try {
-            executions = executeQueries(benchmarks, firstBenchmark.getPrewarmRuns(), true, executionTimeLimit);
+            executions = executeQueries(benchmarks, firstBenchmark.getSuitePrewarmRuns(), true, executionTimeLimit);
         }
         catch (Exception e) {
             return results.values().stream()
@@ -174,7 +174,7 @@ public class BenchmarkExecutionDriver
                 benchmark -> new BenchmarkExecutionResultBuilder(benchmark).withExecutions(List.of())));
         List<QueryExecutionResult> executions;
         try {
-            executions = executeQueries(benchmarks, firstBenchmark.getPrewarmRuns(), true, executionTimeLimit);
+            executions = executeQueries(benchmarks, firstBenchmark.getSuitePrewarmRuns(), true, executionTimeLimit);
         }
         catch (Exception e) {
             return results.values().stream()
@@ -283,7 +283,7 @@ public class BenchmarkExecutionDriver
         for (Query query : benchmark.getQueries()) {
             // warmup locally, but skip local warmup during global warmup
             if (!globalWarmup) {
-                for (int queryRun = 1; queryRun <= benchmark.getLocalWarmupRuns(); queryRun++) {
+                for (int queryRun = 1; queryRun <= benchmark.getBenchmarkPrewarmRuns(); queryRun++) {
                     executionCallables.add(buildQueryExecutionCallable(benchmark, query, true, queryRun));
                 }
             }
