@@ -277,12 +277,12 @@ public class BenchmarkExecutionDriver
         }
     }
 
-    private List<Callable<QueryExecutionResult>> buildQueryExecutionCallables(Benchmark benchmark, int benchmarkRun, boolean globalWarmup, int queryRuns)
+    private List<Callable<QueryExecutionResult>> buildQueryExecutionCallables(Benchmark benchmark, int benchmarkRun, boolean suiteWarmup, int queryRuns)
     {
         List<Callable<QueryExecutionResult>> executionCallables = newArrayList();
         for (Query query : benchmark.getQueries()) {
             // warmup locally, but skip local warmup during global warmup
-            if (!globalWarmup) {
+            if (!suiteWarmup) {
                 for (int queryRun = 1; queryRun <= benchmark.getBenchmarkPrewarmRuns(); queryRun++) {
                     executionCallables.add(buildQueryExecutionCallable(benchmark, query, true, queryRun));
                 }
@@ -290,7 +290,7 @@ public class BenchmarkExecutionDriver
             // real benchmark
             for (int queryRun = 1; queryRun <= queryRuns; queryRun++) {
                 int run = properties.getQueryRepetitionScope() == BenchmarkProperties.QueryRepetitionScope.BENCHMARK ? queryRun : benchmarkRun;
-                executionCallables.add(buildQueryExecutionCallable(benchmark, query, globalWarmup, run));
+                executionCallables.add(buildQueryExecutionCallable(benchmark, query, suiteWarmup, run));
             }
         }
         return executionCallables;
@@ -392,7 +392,7 @@ public class BenchmarkExecutionDriver
             Optional<Path> outputFile)
             throws TimeLimitException
     {
-        LOG.info("Execute query, query=%s, skipReport=%s".formatted(benchmark.getQueries().get(0).getName(), Boolean.toString(skipReport)));
+        LOG.info("Execute query, query=%s, skipReport=%s".formatted(benchmark.getQueries().get(0).getName(), skipReport));
         QueryExecutionResult result;
         macroService.runBenchmarkMacros(benchmark.getBeforeExecutionMacros(), benchmark, connection);
 
