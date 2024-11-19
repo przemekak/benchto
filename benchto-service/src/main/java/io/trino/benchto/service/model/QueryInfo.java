@@ -76,7 +76,7 @@ public class QueryInfo
     {
         return toStringHelper(this)
                 .add("id", id)
-                .add("info", info)
+                .add("info", "info")
                 .toString();
     }
 }
